@@ -21,6 +21,20 @@ import jakarta.validation.constraints.Size;
 @Table(name = "tb_usuarios")
 public class Usuario {
 
+	public Usuario(Long id, @NotNull(message = "O Atributo Nome é Obrigatório!") String nome,
+			@NotNull(message = "O Atributo Usuário é Obrigatório!") @Email(message = "O Atributo Usuário deve ser um email válido!") String usuario,
+			@NotBlank(message = "O Atributo Senha é Obrigatório!") @Size(min = 8, message = "A Senha deve ter no mínimo 8 caracteres") String senha,
+			@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres") String foto,
+			List<Postagem> postagem) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+		this.foto = foto;
+		this.postagem = postagem;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -92,5 +106,17 @@ public class Usuario {
 	public void setPostagem(List<Postagem> postagem) {
 		this.postagem = postagem;
 	}
+
+
+
+public Usuario(Long id, String nome, String usuario, String senha, String foto) {
+	this.id = id;
+	this.nome = nome;
+	this.usuario = usuario;
+	this.senha = senha;
+	this.foto = foto;
+}
+
+public Usuario() { }
 
 }
