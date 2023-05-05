@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.generation.blogpessoal.model.Usuario;
+import com.generation.blogpessoal.model.UsuarioLogin;
 import com.generation.blogpessoal.repository.UsuarioRepository;
 import com.generation.blogpessoal.service.UsuarioService;
 
@@ -83,5 +84,53 @@ public class UsuarioControllerTest {
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 	}
 	
+	@Test
+	@DisplayName("Deve buscar por um usuário pelo ID")
+	public void deveBuscarUmUsuario() {
+		Optional<Usuario>usuarioCadastrado = usuarioService.cadastrarUsuario(new Usuario(0L,"Nicolle", "nicolle@gmail.com", "12345678", "--" ));
+		
+	 Long id = usuarioCadastrado.get().getId();
+	 
+	 ResponseEntity<Usuario>corpoResposta = testRestTemplate 
+			 .withBasicAuth("root@root.com", "rootroot")
+			 .exchange("/usuarios/" + id, HttpMethod.GET, null, Usuario.class);
+	 assertEquals(HttpStatus.OK, corpoResposta.getStatusCode()); 
 	
+			
+		}
+
+	@Test
+	@DisplayName("Deve Logar o Usuário")
+	public void deveLogarUsuario() {
+		usuarioService.cadastrarUsuario(new Usuario
+				(0L, "nick", "nick@nick.com.br", "12345678", "-"));
+		HttpEntity<UsuarioLogin> corpoRequisicao = new HttpEntity<UsuarioLogin>(
+				new UsuarioLogin(0L, "", "nicolle@email.com.br", "13465278", "", ""));
+		ResponseEntity<UsuarioLogin> corpoResposta = testRestTemplate.exchange("/usuarios/logar", HttpMethod.POST,
+				corpoRequisicao, UsuarioLogin.class);
+		assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+	
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 }
